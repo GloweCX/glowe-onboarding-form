@@ -1,0 +1,98 @@
+{
+    "schema_version": "1.0",
+    "submission_mode": "initial",
+    "submitted_at": "2026-07-20T15:42:10.000Z",
+    "source": "glowe_onboarding_form",
+    "contact_ref": {
+          "ghl_contact_id": null,
+          "update_token": null
+    },
+    "business": {
+          "name": "Lashes by Jordan (Test)",
+          "owner_first_name": "Jordan",
+          "phone": "+15551234567",
+          "email": "hello@example-test-salon.com",
+          "website_url": "https://example-test-salon.com",
+          "address": {
+                  "line1": "123 Main St",
+                  "city": "Austin",
+                  "state": "TX",
+                  "postal_code": "78701",
+                  "country": "United States"
+          },
+          "timezone": "America/Chicago",
+          "primary_service_category": "lash",
+          "booking_platform": "GlossGenius",
+          "booking_url": "https://book.gloss.me/example-test-salon",
+          "google_business_profile_url": "https://maps.google.com/?cid=00000000",
+          "google_review_url": "https://g.page/r/example-test-review-link",
+          "facebook_url": "https://facebook.com/example-test-salon",
+          "instagram_url": "https://instagram.com/example-test-salon"
+    },
+    "onboarding": {
+          "customers": {
+                  "active_client_range": "50to149",
+                  "avg_visit_value": 150,
+                  "review_count": 47,
+                  "star_rating": "4.5to4.9"
+          },
+          "branding": {
+                  "tone": "warm",
+                  "restricted_words": "deal, limited time, act now",
+                  "current_promotion": "New clients get 15% off through August 31 (test data)",
+                  "tone_preview_approved": true
+          },
+          "missed_call": {
+                  "during_hours_response": "booking_link",
+                  "during_hours_custom_message": "",
+                  "after_hours_response": "hours_info",
+                  "after_hours_custom_message": "",
+                  "business_hours": {
+                            "mon": { "open": "09:00", "close": "18:00" },
+                            "tue": { "open": "09:00", "close": "18:00" },
+                            "wed": { "open": "09:00", "close": "18:00" },
+                            "thu": { "open": "09:00", "close": "18:00" },
+                            "fri": { "open": "09:00", "close": "18:00" },
+                            "sat": { "open": "10:00", "close": "16:00" },
+                            "sun": { "open": null, "close": null }
+                  },
+                  "internal_alert_phone": "+15559876543"
+          },
+          "reviews": {
+                  "timing_preference": "2hours",
+                  "personal_note": "It was so great seeing you today! (test data)"
+          },
+          "notifications": {
+                  "missed_call_alert_phone": "+15559876543",
+                  "new_lead_email": "leads@example-test-salon.com",
+                  "monthly_report_email": "owner@example-test-salon.com"
+          },
+          "additional_notes": "Closed the first week of July for vacation. (test data)"
+    },
+    "services": [
+          {
+                  "service_number": 1,
+                  "service_id": "svc_test0001",
+                  "name": "Classic Lash Fill",
+                  "category": "lash",
+                  "duration_minutes": 60,
+                  "price": 85,
+                  "return_interval": 3,
+                  "return_unit": "weeks",
+                  "notes": "Avoid oil-based products 24 hours before.",
+                  "reactivation_enabled": true
+          },
+          {
+                  "service_number": 2,
+                  "service_id": "svc_test0002",
+                  "name": "Volume Lash Full Set",
+                  "category": "lash",
+                  "duration_minutes": 120,
+                  "price": 220,
+                  "return_interval": 3,
+                  "return_unit": "weeks",
+                  "notes": "",
+                  "reactivation_enabled": true
+          }
+    ]
+}
