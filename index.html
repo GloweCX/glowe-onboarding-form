@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Glowe — Client Onboarding Form</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#262626; --cream:#F9F8F5; --white:#fff;
+  --green:#00CA72; --green-d:#009f5a; --green-l:rgba(0,202,114,.10);
+  --green-xl:rgba(0,202,114,.06);
+  --muted:#6b6a66; --border:#dddbd4; --g1:#f0efeb;
+  --r:10px; --rl:16px; --rx:22px;
+  --err:#e53e3e; --err-l:rgba(229,62,62,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+.hdr{
+  background:var(--ink);
+  padding:20px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.logo{font-size:18px;font-weight:700;color:var(--white);letter-spacing:.08em}
+.logo em{font-style:italic;color:var(--green);font-family:'Lora',serif}
+.hdr-step{font-size:11px;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase}
+.prog-bar-wrap{height:3px;background:rgba(255,255,255,.1);position:relative}
+.prog-bar-fill{height:100%;background:var(--green);transition:width .4s ease;width:0%}
+.mode-banner{background:#12331f;color:var(--green);padding:10px 16px;font-size:12px;font-weight:600;text-align:center;display:none}
+.mode-banner.show{display:block}
+.shell{max-width:680px;margin:0 auto;padding:40px 24px 80px}
+.section-header{margin-bottom:28px}
+.section-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--green-d);display:block;margin-bottom:6px
+}
+.section-title{font-size:22px;font-weight:800;color:var(--ink);line-height:1.2;letter-spacing:-.3px;margin-bottom:6px}
+.section-sub{font-size:13.5px;color:var(--muted);line-height:1.65}
+.step{display:none}
+.step.active{display:block}
+.field{margin-bottom:20px}
+.field-label{
+  display:block;font-size:12px;font-weight:700;color:var(--ink);
+  margin-bottom:6px;letter-spacing:.02em
+}
+.field-label .req{color:var(--green-d);margin-left:2px}
+.field-hint{font-size:11.5px;color:var(--muted);margin-bottom:6px;line-height:1.5}
+input[type=text],input[type=email],input[type=tel],input[type=url],
+input[type=number],select,textarea{
+  width:100%;
+  padding:12px 14px;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  font-family:'Poppins',sans-serif;
+  font-size:14px;
+  color:var(--ink);
+  background:var(--white);
+  transition:border-color .15s;
+  -webkit-appearance:none;
+  appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+  outline:none;
+  border-color:var(--green);
+  box-shadow:0 0 0 3px var(--green-l);
+}
+input.error,select.error,textarea.error{
+  border-color:var(--err);
+  background:var(--err-l);
+}
+textarea{min-height:88px;resize:vertical;line-height:1.6}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6a66' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+  cursor:pointer;
+}
+.field-err{font-size:11.5px;color:var(--err);margin-top:4px;display:none}
+.field-err.show{display:block}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:540px){
+  .field-row,.field-row-3{grid-template-columns:1fr}
+}
+.radio-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.radio-card{
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  padding:14px 16px;
+  cursor:pointer;
+  transition:all .15s;
+  position:relative;
+  background:var(--white);
+}
+.radio-card:hover{border-color:var(--green);background:var(--green-xl)}
+.radio-card input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+.radio-card.selected{border-color:var(--green);background:var(--green-l)}
+.radio-card-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.radio-card-sub{font-size:11.5px;color:var(--muted);line-height:1.4}
+@media(max-width:480px){.radio-grid{grid-template-columns:1fr}}
+.tone-preview{
+  background:var(--ink);border-radius:var(--r);padding:16px 18px;
+  margin-top:14px;display:none
+}
+.tone-preview.show{display:block}
+.tp-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--green);margin-bottom:8px;display:block}
+.tp-msg{font-size:13px;color:rgba(249,248,245,.75);line-height:1.7;font-family:'Lora',serif;font-style:italic}
+.service-block{
+  background:var(--g1);border-radius:var(--rl);padding:20px;
+  margin-bottom:14px;position:relative;border:1.5px solid transparent;
+}
+.service-block-header{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:16px
+}
+.service-num{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--green-d)
+}
+.service-remove{
+  background:none;border:none;cursor:pointer;
+  font-size:12px;color:var(--muted);padding:4px 8px;
+  border-radius:var(--r);transition:all .15s
+}
+.service-remove:hover{background:rgba(229,62,62,.1);color:var(--err)}
+.add-service-btn{
+  width:100%;padding:13px;
+  border:2px dashed var(--border);
+  border-radius:var(--r);
+  background:transparent;
+  font-family:'Poppins',sans-serif;
+  font-size:13px;font-weight:600;
+  color:var(--muted);
+  cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-top:4px;
+}
+.add-service-btn:hover{border-color:var(--green);color:var(--green-d);background:var(--green-xl)}
+.add-service-btn:disabled{opacity:.5;cursor:not-allowed}
+.interval-row{display:grid;grid-template-columns:1fr 140px;gap:10px}
+@media(max-width:480px){.interval-row{grid-template-columns:1fr}}
+.toggle-wrap{display:flex;align-items:center;gap:12px;padding:10px 0}
+.toggle{
+  position:relative;width:44px;height:24px;flex-shrink:0
+}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-slider{
+  position:absolute;inset:0;
+  background:var(--border);border-radius:100px;cursor:pointer;
+  transition:background .2s;
+}
+.toggle-slider::before{
+  content:'';position:absolute;
+  width:18px;height:18px;border-radius:50%;
+  left:3px;top:3px;background:var(--white);
+  transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.toggle input:checked + .toggle-slider{background:var(--green)}
+.toggle input:checked + .toggle-slider::before{transform:translateX(20px)}
+.toggle-label{font-size:13px;color:var(--muted)}
+.hours-table{border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:8px}
+.hours-row{
+  display:grid;grid-template-columns:90px 1fr 1fr;
+  border-bottom:1px solid var(--border);align-items:center;
+}
+.hours-row:last-child{border-bottom:none}
+.hours-day{
+  padding:10px 14px;font-size:12.5px;font-weight:600;color:var(--ink);
+  background:var(--g1);border-right:1px solid var(--border);
+}
+.hours-row input[type=time]{
+  border:none;border-radius:0;padding:10px 12px;
+  font-size:13px;border-right:1px solid var(--border);
+}
+.hours-row input[type=time]:last-child{border-right:none}
+.hours-row input[type=time]:focus{box-shadow:none;border-color:transparent;background:var(--green-xl)}
+.note-box{
+  background:var(--green-xl);border:1px solid rgba(0,202,114,.2);
+  border-radius:var(--r);padding:14px 16px;margin-bottom:20px;
+}
+.note-box p{font-size:12.5px;color:var(--muted);line-height:1.65;margin:0}
+.note-box p strong{color:var(--ink)}
+.readonly-note{
+  background:var(--g1);border:1.5px solid var(--border);border-radius:var(--r);
+  padding:12px 14px;font-size:13px;color:var(--ink);word-break:break-all;
+}
+.error-banner{
+  background:var(--err-l);border:1px solid rgba(229,62,62,.3);
+  border-radius:var(--r);padding:14px 16px;margin-bottom:20px;display:none;
+}
+.error-banner.show{display:block}
+.error-banner p{font-size:12.5px;color:var(--err);line-height:1.6;margin:0}
+.sdiv{height:1px;background:var(--border);margin:24px 0}
+.btn-row{display:flex;gap:12px;margin-top:28px;align-items:center}
+.btn-primary{
+  background:var(--green);color:var(--ink);
+  border:none;border-radius:var(--r);
+  padding:14px 28px;font-family:'Poppins',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;
+  transition:background .15s;flex-shrink:0;
+}
+.btn-primary:hover{background:#00b864}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;background:var(--green)}
+.btn-secondary{
+  background:transparent;color:var(--muted);
+  border:1.5px solid var(--border);
+  border-radius:var(--r);padding:13px 22px;
+  font-family:'Poppins',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .15s;
+}
+.btn-secondary:hover{border-color:var(--ink);color:var(--ink)}
+.btn-row .spacer{flex:1}
+.step-hint{font-size:12px;color:var(--muted)}
+.success-screen{display:none;text-align:center;padding:60px 24px}
+.success-screen.show{display:block}
+.success-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--green);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;font-size:32px;
+}
+.success-title{font-size:24px;font-weight:800;color:var(--ink);margin-bottom:10px}
+.success-sub{font-size:14px;color:var(--muted);line-height:1.7;max-width:480px;margin:0 auto 28px}
+.success-steps{
+  background:var(--g1);border-radius:var(--rl);padding:24px;
+  text-align:left;max-width:480px;margin:0 auto;
+}
+.ss-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:14px;display:block}
+.ss-item{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);
+  font-size:13px;color:var(--muted);line-height:1.5;align-items:flex-start}
+.ss-item:last-child{border-bottom:none}
+.ss-item strong{color:var(--ink)}
+.ss-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:5px}
+.saving-bar{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--ink);color:var(--cream);
+  padding:10px 20px;border-radius:100px;
+  font-size:12.5px;font-weight:600;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+  z-index:200;
+}
+.saving-bar.show{opacity:1}
+.submitting-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(249,248,245,.85);
+  z-index:300;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+}
+.submitting-overlay.show{display:flex}
+.spin{
+  width:40px;height:40px;border:3px solid var(--border);
+  border-top-color:var(--green);border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.submitting-overlay p{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+  <header class="hdr">
+    <div class="logo"><em>g</em>LOWE</div>
+    <div class="hdr-step" id="hdr-step">Onboarding · Step 1 of 7</div>
+  </header>
+  <div class="prog-bar-wrap">
+    <div class="prog-bar-fill" id="prog-bar"></div>
+  </div>
+  <div class="mode-banner" id="mode-banner"></div>
+
+  <div class="shell">
+
+    <div class="error-banner" id="global-error-banner">
+      <p id="global-error-text">Something went wrong.</p>
+  </div>
+
+  <div class="step active" id="step-1">
+    <div class="section-header">
+      <span class="section-eyebrow">Section 1 of 7</span>
+        <div class="section-title">Your Business</div>
+        <div class="section-sub">Basic information about your business. This populates every automated message Glowe sends on your behalf.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="biz_name">Business name <span class="req">*</span></label>
+        <div class="field-hint">Exactly as it appears to your clients — this shows up in every message.</div>
+        <input type="text" id="biz_name" placeholder="e.g. Lashes by Jordan"/>
+        <div class="field-err" id="err-biz_name">Please enter your business name.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="owner_name">Your first name <span class="req">*</span></label>
+        <input type="text" id="owner_name" placeholder="e.g. Jordan"/>
+        <div class="field-err" id="err-owner_name">Please enter your name.</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="biz_phone">Business phone <span class="req">*</span></label>
+          <div class="field-hint">The number Glowe monitors for missed calls.</div>
+        <input type="tel" id="biz_phone" placeholder="(555) 000-0000"/>
+          <div class="field-err" id="err-biz_phone">Please enter a valid 10-digit phone number.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="biz_email">Business email <span class="req">*</span></label>
+        <input type="email" id="biz_email" placeholder="hello@yourstudio.com"/>
+          <div class="field-err" id="err-biz_email">Please enter a valid email address.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="biz_website">Business website URL</label>
+        <input type="url" id="biz_website" placeholder="https://yourstudio.com"/>
+        <div class="field-err" id="err-biz_website">Please enter a valid URL (starting with http:// or https://).</div>
+    </div>
+
+          <div class="field">
+            <label class="field-label" for="biz_address">Business address <span class="req">*</span></label>
+        <input type="text" id="biz_address" placeholder="123 Main St"/>
+        <div class="field-err" id="err-biz_address">Please enter your business address.</div>
+      </div>
+
+      <div class="field-row-3">
+        <div class="field">
+          <label class="field-label" for="biz_city">City <span class="req">*</span></label>
+          <input type="text" id="biz_city" placeholder="Chicago"/>
+          <div class="field-err" id="err-biz_city">Required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="biz_state">State <span class="req">*</span></label>
+          <input type="text" id="biz_state" placeholder="IL"/>
+          <div class="field-err" id="err-biz_state">Required.</div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="biz_postcode">ZIP Code <span class="req">*</span></label>
+          <input type="text" id="biz_postcode" placeholder="60601"/>
+          <div class="field-err" id="err-biz_postcode">Required.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="biz_timezone">Timezone <span class="req">*</span></label>
+        <div class="field-hint">Used to ensure messages fire at the right time for your clients.</div>
+      <select id="biz_timezone">
+        <option value="">Select your timezone</option>
+        <option value="America/New_York">Eastern Time (ET)</option>
+        <option value="America/Chicago">Central Time (CT)</option>
+        <option value="America/Denver">Mountain Time (MT)</option>
+        <option value="America/Los_Angeles">Pacific Time (PT)</option>
+        <option value="America/Anchorage">Alaska Time (AKT)</option>
+        <option value="Pacific/Honolulu">Hawaii Time (HT)</option>
+      </select>
+      <div class="field-err" id="err-biz_timezone">Please select your timezone.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="gbp_url">Google Business Profile URL</label>
+        <div class="field-hint">Your full GBP listing URL (find it by searching your business name on Google).</div>
+      <input type="url" id="gbp_url" placeholder="https://maps.google.com/?cid=..."/>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="review_link">Google review link <span class="req">*</span></label>
+        <div class="field-hint">The direct link your clients click to leave a Google review. Find it in your Google Business Profile under "Ask for reviews." This same link is used later in Section 6.</div>
+        <input type="url" id="review_link" placeholder="https://g.page/r/..."/>
+        <div class="field-err" id="err-review_link">Please enter your Google review link.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="service_category">Primary service category <span class="req">*</span></label>
+        <select id="service_category">
+          <option value="">Select your primary category</option>
+          <option value="lash">Lash</option>
+          <option value="brow">Brow</option>
+          <option value="hair">Hair</option>
+          <option value="skin">Skin / Esthetics</option>
+          <option value="wellness">Wellness</option>
+          <option value="fitness">Fitness / Pilates</option>
+          <option value="nails">Nails</option>
+          <option value="waxing">Waxing / PMU</option>
+          <option value="massage">Massage</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="field-err" id="err-service_category">Please select a category.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="booking_platform">Do you have a booking platform? <span class="req">*</span></label>
+        <select id="booking_platform">
+          <option value="">Select your booking platform</option>
+          <option value="GlossGenius">GlossGenius</option>
+          <option value="Vagaro">Vagaro</option>
+          <option value="Boulevard">Boulevard</option>
+          <option value="Mindbody">Mindbody</option>
+          <option value="Square Appointments">Square Appointments</option>
+          <option value="Fresha">Fresha</option>
+          <option value="Acuity">Acuity Scheduling</option>
+          <option value="Schedulicity">Schedulicity</option>
+          <option value="none">I don't use a booking platform</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="field-err" id="err-booking_platform">Please select an option.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="booking_url">Your booking link URL</label>
+        <div class="field-hint">The direct link clients use to book with you. Used in missed call text-back messages.</div>
+        <input type="url" id="booking_url" placeholder="https://book.gloss.me/yourstudio"/>
+        <div class="field-err" id="err-booking_url">Please enter a valid URL.</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="field-label" for="instagram_url">Instagram URL</label>
+          <input type="url" id="instagram_url" placeholder="https://instagram.com/yourstudio"/>
+        </div>
+        <div class="field">
+          <label class="field-label" for="facebook_url">Facebook URL</label>
+          <input type="url" id="facebook_url" placeholder="https://facebook.com/yourstudio"/>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <div class="spacer"></div>
+        <span class="step-hint">Step 1 of 7</span>
+        <button class="btn-primary" onclick="nextStep(1)" type="button">Continue →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-2">
+      <div class="section-header">
+        <span class="section-eyebrow">Section 2 of 7</span>
+        <div class="section-title">Your Service Menu</div>
+      <div class="section-sub">Add each service you offer (up to 10). Glowe uses the return interval to know exactly when to reach out to each client — not a generic timer, your service's specific cadence.</div>
+      </div>
+
+      <div class="note-box">
+        <p><strong>Why return intervals matter:</strong> A lash fill client who comes every 21 days gets a different reactivation message than a color client who comes every 8 weeks. Take 2 minutes to fill this in accurately.</p>
+    </div>
+
+    <div class="field-err" id="err-services" style="margin-bottom:14px">Please add at least one service before continuing.</div>
+
+      <div id="service-blocks"></div>
+
+      <button class="add-service-btn" id="add-service-btn" onclick="addService()" type="button">
+        <span>+</span> Add another service
+    </button>
+    <div class="field-hint" style="margin-top:8px" id="service-count-hint">1 of 10 services added</div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="prevStep(2)" type="button">← Back</button>
+        <div class="spacer"></div>
+        <span class="step-hint">Step 2 of 7</span>
+        <button class="btn-primary" onclick="nextStep(2)" type="button">Continue →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-3">
+      <div class="section-header">
+        <span class="section-eyebrow">Section 3 of 7</span>
+        <div class="section-title">Your Customers</div>
+        <div class="section-sub">Help Glowe understand your client base so your monthly performance reports are accurate from day one.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="contact_count">Approximate number of active clients <span class="req">*</span></label>
+        <div class="field-hint">Clients who have visited in the last 6 months. Rough number is fine.</div>
+        <select id="contact_count">
+          <option value="">Select a range</option>
+        <option value="under50">Fewer than 50</option>
+        <option value="50to149">50–149</option>
+          <option value="150to499">150–499</option>
+          <option value="500plus">500+</option>
+        </select>
+        <div class="field-err" id="err-contact_count">Please select a range.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="avg_visit_value">Average visit value <span class="req">*</span></label>
+        <div class="field-hint">Approximate average spend per appointment, in dollars.</div>
+        <input type="number" id="avg_visit_value" placeholder="e.g. 150" min="1" max="9999" step="0.01"/>
+        <div class="field-err" id="err-avg_visit_value">Please enter your average visit value.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="review_count">Current Google review count</label>
+        <div class="field-hint">Used as your baseline for monthly reporting. Check Google now if you're not sure.</div>
+        <input type="number" id="review_count" placeholder="e.g. 47" min="0"/>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="star_rating">Current Google star rating</label>
+        <select id="star_rating">
+          <option value="">Select your current rating</option>
+          <option value="5.0">5.0</option>
+          <option value="4.5to4.9">4.5 – 4.9</option>
+          <option value="4.0to4.4">4.0 – 4.4</option>
+          <option value="below4">Below 4.0</option>
+          <option value="no_rating">No rating yet</option>
+      </select>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="prevStep(3)" type="button">← Back</button>
+        <div class="spacer"></div>
+        <span class="step-hint">Step 3 of 7</span>
+        <button class="btn-primary" onclick="nextStep(3)" type="button">Continue →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-4">
+      <div class="section-header">
+        <span class="section-eyebrow">Section 4 of 7</span>
+        <div class="section-title">Your Voice &amp; Tone</div>
+        <div class="section-sub">Every message Glowe sends goes out in your voice, not ours. Take a moment to tell us how you naturally communicate with your clients.</div>
+    </div>
+
+    <div class="note-box">
+        <p>Your tone preference shapes how Glowe communicates with your clients on your behalf. <strong>We recommend keeping these settings in place for at least 60 days.</strong> You can update at any time by contacting support.</p>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Tone preference <span class="req">*</span></label>
+      <div class="radio-grid" id="tone-grid">
+        <label class="radio-card" data-tone="warm">
+          <input type="radio" name="tone" value="warm"/>
+            <div class="radio-card-title">Warm &amp; Personal</div>
+            <div class="radio-card-sub">Friendly, conversational, feels like a text from someone who cares</div>
+          </label>
+          <label class="radio-card" data-tone="professional">
+            <input type="radio" name="tone" value="professional"/>
+            <div class="radio-card-title">Professional &amp; Polished</div>
+            <div class="radio-card-sub">Confident, clean, elevated — appropriate for upscale clientele</div>
+          </label>
+          <label class="radio-card" data-tone="fun">
+            <input type="radio" name="tone" value="fun"/>
+            <div class="radio-card-title">Fun &amp; Upbeat</div>
+            <div class="radio-card-sub">Energetic, playful, emoji-friendly — fits a vibrant studio vibe</div>
+          </label>
+          <label class="radio-card" data-tone="calm">
+            <input type="radio" name="tone" value="calm"/>
+            <div class="radio-card-title">Calm &amp; Wellness-Focused</div>
+            <div class="radio-card-sub">Grounded, thoughtful, nurturing — fits wellness and holistic practices</div>
+          </label>
+        </div>
+        <div class="field-err" id="err-tone">Please select a tone.</div>
+        <div class="tone-preview" id="tone-preview">
+          <span class="tp-label">Preview — what your clients will receive</span>
+          <div class="tp-msg" id="tp-msg"></div>
+          <div style="margin-top:14px">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+              <input type="checkbox" id="tone_preview_approved" style="width:16px;height:16px;accent-color:var(--green)" onchange="saveProgress()"/>
+              <span style="font-size:12.5px;color:rgba(249,248,245,.7)">This sounds like me — approved</span>
+          </label>
+        </div>
+      </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="never_use">Words or phrases to never use</label>
+        <div class="field-hint">Anything that feels off-brand, too salesy, or that you'd never say to a client. Optional.</div>
+        <textarea id="never_use" placeholder="e.g. 'Deal', 'Limited time', 'Act now'"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="promotions">Active promotions or offers</label>
+        <div class="field-hint">Any current promotions Glowe should mention in reactivation messages. Leave blank if none.</div>
+      <textarea id="promotions" placeholder="e.g. 'New clients get 15% off their first full set through August 31'"></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="prevStep(4)" type="button">← Back</button>
+        <div class="spacer"></div>
+        <span class="step-hint">Step 4 of 7</span>
+        <button class="btn-primary" onclick="nextStep(4)" type="button">Continue →</button>
+      </div>
+    </div>
+
+    <div class="step" id="step-5">
+      <div class="section-header">
+        <span class="section-eyebrow">Section 5 of 7</span>
+        <div class="section-title">Missed Call Preferences</div>
+      <div class="section-sub">When a call goes unanswered, Glowe responds automatically within 60 seconds. Tell us how you want to handle it.</div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="during_hours_response">During business hours response <span class="req">*</span></label>
+        <select id="during_hours_response">
+          <option value="">Select a response type</option>
+          <option value="booking_link">Send booking link — direct them to book immediately</option>
+          <option value="reply_invite">Invite a reply — "We missed you! Reply here and we'll get back to you."</option>
+          <option value="call_back">Ask them to call back — "We're with a client. Please call us back at [number]."</option>
+          <option value="custom">Custom message (enter below)</option>
+      </select>
+              <div class="field-err" id="err-during_hours_response">Please select a response type.</div>
+            </div>
+
+            <div class="field" id="during-custom-field" style="display:none">
+              <label class="field-label" for="during_hours_custom">Custom during-hours message</label>
+              <textarea id="during_hours_custom" placeholder="Type the exact message you want sent..."></textarea>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="after_hours_response">After hours response <span class="req">*</span></label>
+              <select id="after_hours_response">
+                <option value="">Select a response type</option>
+                <option value="booking_link">Send booking link</option>
+        <option value="reply_invite">Invite a reply with hours info</option>
+                <option value="hours_info">Share business hours + booking link</option>
+                <option value="custom">Custom message (enter below)</option>
+      </select>
+              <div class="field-err" id="err-after_hours_response">Please select a response type.</div>
+            </div>
+
+            <div class="field" id="after-custom-field" style="display:none">
+              <label class="field-label" for="after_hours_custom">Custom after-hours message</label>
+              <textarea id="after_hours_custom" placeholder="Type the exact message you want sent..."></textarea>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Your business hours <span class="req">*</span></label>
+      <div class="field-hint">Used for time-based branching — during vs. after hours responses. Enter open/close times or leave blank for closed days.</div>
+      <div class="hours-table">
+        <div class="hours-row"><div class="hours-day">Mon</div><input type="time" id="mon_open" value="09:00" aria-label="Monday open time"/><input type="time" id="mon_close" value="18:00" aria-label="Monday close time"/></div>
+                <div class="hours-row"><div class="hours-day">Tue</div><input type="time" id="tue_open" value="09:00" aria-label="Tuesday open time"/><input type="time" id="tue_close" value="18:00" aria-label="Tuesday close time"/></div>
+                <div class="hours-row"><div class="hours-day">Wed</div><input type="time" id="wed_open" value="09:00" aria-label="Wednesday open time"/><input type="time" id="wed_close" value="18:00" aria-label="Wednesday close time"/></div>
+                <div class="hours-row"><div class="hours-day">Thu</div><input type="time" id="thu_open" value="09:00" aria-label="Thursday open time"/><input type="time" id="thu_close" value="18:00" aria-label="Thursday close time"/></div>
+                <div class="hours-row"><div class="hours-day">Fri</div><input type="time" id="fri_open" value="09:00" aria-label="Friday open time"/><input type="time" id="fri_close" value="18:00" aria-label="Friday close time"/></div>
+                <div class="hours-row"><div class="hours-day">Sat</div><input type="time" id="sat_open" value="10:00" aria-label="Saturday open time"/><input type="time" id="sat_close" value="16:00" aria-label="Saturday close time"/></div>
+                <div class="hours-row"><div class="hours-day">Sun</div><input type="time" id="sun_open" aria-label="Sunday open time"/><input type="time" id="sun_close" aria-label="Sunday close time"/></div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="alert_phone">Internal missed call alert</label>
+              <div class="field-hint">Do you want a text alert every time a call is missed? Enter the number to receive them.</div>
+              <input type="tel" id="alert_phone" placeholder="(555) 000-0000 — leave blank if not needed"/>
+              <div class="field-err" id="err-alert_phone">Please enter a valid 10-digit phone number.</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="prevStep(5)" type="button">← Back</button>
+              <div class="spacer"></div>
+              <span class="step-hint">Step 5 of 7</span>
+              <button class="btn-primary" onclick="nextStep(5)" type="button">Continue →</button>
+            </div>
+          </div>
+
+          <div class="step" id="step-6">
+            <div class="section-header">
+              <span class="section-eyebrow">Section 6 of 7</span>
+              <div class="section-title">Review Setup</div>
+              <div class="section-sub">Glowe sends a review request 1–2 hours after every appointment — at exactly the moment a client is most likely to say something great about you.</div>
+    </div>
+
+    <div class="note-box">
+              <p>The review request fires automatically after every appointment, using the Google review link you already entered in Section 1.</p>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Your Google review link (from Section 1)</label>
+              <div class="readonly-note" id="review_link_display">Not yet entered — go back to Section 1 to add it.</div>
+    </div>
+
+    <div class="field">
+              <label class="field-label" for="review_timing">Review request timing preference</label>
+              <select id="review_timing">
+                <option value="2hours">2 hours after appointment (recommended)</option>
+                <option value="same_day_evening">Same day, 6pm</option>
+                <option value="next_morning">Next morning, 9am</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="review_personal_note">Add a personal note to review requests?</label>
+              <div class="field-hint">Optional — something personal from you that goes at the top of the review request message. Leave blank to use Glowe's default.</div>
+              <textarea id="review_personal_note" placeholder="e.g. 'It was so great seeing you today! If you have a moment...'"></textarea>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn-secondary" onclick="prevStep(6)" type="button">← Back</button>
+              <div class="spacer"></div>
+              <span class="step-hint">Step 6 of 7</span>
+              <button class="btn-primary" onclick="nextStep(6)" type="button">Continue →</button>
+            </div>
+          </div>
+
+          <div class="step" id="step-7">
+            <div class="section-header">
+              <span class="section-eyebrow">Section 7 of 7</span>
+              <div class="section-title">Notifications &amp; Reporting</div>
+              <div class="section-sub">Last step. Tell us who gets what — and you're done.</div>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="notif_missed_phone">Who receives missed call alerts (SMS) <span class="req">*</span></label>
+              <div class="field-hint">Phone number to text when a call is missed and a response is sent.</div>
+              <input type="tel" id="notif_missed_phone" placeholder="(555) 000-0000"/>
+              <div class="field-err" id="err-notif_missed_phone">Please enter a valid 10-digit phone number.</div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="notif_lead_email">Who receives new lead notifications (email) <span class="req">*</span></label>
+              <input type="email" id="notif_lead_email" placeholder="you@yourstudio.com"/>
+              <div class="field-err" id="err-notif_lead_email">Please enter a valid email address.</div>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="notif_report_email">Who receives the monthly performance report <span class="req">*</span></label>
+              <input type="email" id="notif_report_email" placeholder="you@yourstudio.com"/>
+              <div class="field-err" id="err-notif_report_email">Please enter a valid email address.</div>
+            </div>
+
+            <div class="sdiv"></div>
+
+            <div class="field">
+              <label class="field-label" for="additional_notes">Anything else we should know?</label>
+              <div class="field-hint">Special circumstances, seasonal hours, anything you want your Glowe advisor to know before setup begins.</div>
+              <textarea id="additional_notes" placeholder="Optional — leave blank if nothing comes to mind."></textarea>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn-secondary" onclick="prevStep(7)" type="button">← Back</button>
+              <div class="spacer"></div>
+              <button class="btn-primary" onclick="submitForm()" id="submit-btn" type="button">Submit Onboarding →</button>
+            </div>
+          </div>
+
+          <div class="success-screen" id="success-screen">
+            <div class="success-icon">✓</div>
+            <div class="success-title">You're all set.</div>
+            <div class="success-sub">Your onboarding form has been received. Your Glowe advisor will review everything and reach out within one business day to confirm your account is ready to go live.</div>
+            <div class="success-steps">
+              <span class="ss-label">What happens next</span>
+      <div class="ss-item"><div class="ss-dot"></div><div><strong>Your setup is reviewed</strong> — your advisor checks every field and confirms your service cadences are configured correctly.</div></div>
+              <div class="ss-item"><div class="ss-dot"></div><div><strong>Your account goes live</strong> — typically within 3–5 business days of form submission.</div></div>
+      <div class="ss-item"><div class="ss-dot"></div><div><strong>First performance report</strong> — arrives 30 days after launch, showing exactly what Glowe has done for your business.</div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="saving-bar" id="saving-bar">Progress saved ✓</div>
+
+        <div class="submitting-overlay" id="submitting-overlay">
+          <div class="spin"></div>
+          <p id="submitting-text">Submitting your onboarding form...</p>
+        </div>
+
+        <script>
+        /* =========================================================
+           CONFIG — environment-specific values live here only.
+           ========================================================= */
+        var CONFIG = {
+          SCHEMA_VERSION: '1.0',
+          SOURCE: 'glowe_onboarding_form',
+          ZAPIER_WEBHOOK_URL: 'https://hooks.zapier.com/hooks/catch/25883126/44fmx9n/',
+          UPDATE_LOOKUP_ENDPOINT: null,
+          SUBMIT_TIMEOUT_MS: 15000
+        };
+
+var urlParams = new URLSearchParams(window.location.search);
+var SUBMISSION_MODE = urlParams.get('mode') === 'update' ? 'update' : 'initial';
+var GHL_CONTACT_ID = urlParams.get('cid') || null;
+var UPDATE_TOKEN = urlParams.get('token') || null;
+
+var currentStep = 1;
+var totalSteps = 7;
+var services = [];
+var selectedTone = '';
+var isSubmitting = false;
+var hasSubmitted = false;
+var serviceIdCounter = 0;
+
+function newServiceId() {
+    serviceIdCounter += 1;
+  return 'svc_' + Date.now().toString(36) + '_' + serviceIdCounter;
+}
+
+function val(id) {
+    var el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function normalizePhone(raw) {
+    if (!raw) return '';
+        var digits = raw.replace(/\D/g, '');
+            if (digits.length === 10) return '+1' + digits;
+  if (digits.length === 11 && digits.charAt(0) === '1') return '+' + digits;
+  return digits ? raw.trim() : '';
+}
+
+function normalizeUrl(raw) {
+    if (!raw) return '';
+        var trimmed = raw.trim();
+  if (!trimmed) return '';
+      if (!/^https?:\/\//i.test(trimmed)) trimmed = 'https://' + trimmed;
+          return trimmed;
+        }
+
+        function normalizeEmail(raw) {
+            return raw ? raw.trim().toLowerCase() : '';
+        }
+
+/* =========================================================
+     PROGRESS + STEP NAV
+     ========================================================= */
+function updateProgress(step) {
+    var pct = ((step - 1) / totalSteps) * 100;
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('hdr-step').textContent = 'Onboarding · Step ' + step + ' of ' + totalSteps;
+}
+
+function showStep(n) {
+    var steps = document.querySelectorAll('.step');
+  for (var i = 0; i < steps.length; i++) steps[i].classList.remove('active');
+  document.getElementById('step-' + n).classList.add('active');
+  updateProgress(n);
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  currentStep = n;
+  if (n === 6) updateReviewLinkDisplay();
+  saveProgress();
+}
+
+function nextStep(from) {
+    if (!validateStep(from)) return;
+  showStep(from + 1);
+}
+
+function prevStep(from) {
+    showStep(from - 1);
+}
+
+function updateReviewLinkDisplay() {
+    var display = document.getElementById('review_link_display');
+  var linkVal = val('review_link');
+  if (display) {
+    display.textContent = linkVal ? linkVal : 'Not yet entered — go back to Section 1 to add it.';
+  }
+}
+
+/* =========================================================
+     VALIDATION
+     ========================================================= */
+function clearFieldError(id) {
+    var el = document.getElementById(id);
+  var err = document.getElementById('err-' + id);
+  if (el) el.classList.remove('error');
+  if (err) err.classList.remove('show');
+}
+
+function setFieldError(id) {
+    var el = document.getElementById(id);
+  var err = document.getElementById('err-' + id);
+  if (el) el.classList.add('error');
+  if (err) err.classList.add('show');
+}
+
+function required(id) {
+    var el = document.getElementById(id);
+  var value = el ? el.value.trim() : '';
+  if (!value) { setFieldError(id); return false; }
+  clearFieldError(id);
+  return true;
+}
+
+function validEmail(id, optional) {
+    var el = document.getElementById(id);
+  var value = el ? el.value.trim() : '';
+  if (!value) {
+    if (optional) { clearFieldError(id); return true; }
+    setFieldError(id); return false;
+  }
+  var ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  if (!ok) { setFieldError(id); return false; }
+  clearFieldError(id);
+  return true;
+}
+
+function validPhone(id, optional) {
+    var el = document.getElementById(id);
+  var value = el ? el.value.trim() : '';
+  if (!value) {
+    if (optional) { clearFieldError(id); return true; }
+    setFieldError(id); return false;
+  }
+  var digits = value.replace(/\D/g, '');
+      var ok = digits.length === 10 || (digits.length === 11 && digits.charAt(0) === '1');
+  if (!ok) { setFieldError(id); return false; }
+  clearFieldError(id);
+  return true;
+}
+
+function validUrl(id, optional) {
+    var el = document.getElementById(id);
+  var value = el ? el.value.trim() : '';
+  if (!value) {
+    if (optional) { clearFieldError(id); return true; }
+    setFieldError(id); return false;
+  }
+  var ok = true;
+  try { new URL(/^https?:\/\//i.test(value) ? value : 'https://' + value); }
+      catch (e) { ok = false; }
+      if (!ok) { setFieldError(id); return false; }
+  clearFieldError(id);
+  return true;
+}
+
+function validateStep(step) {
+    var valid = true;
+
+  if (step === 1) {
+    if (!required('biz_name')) valid = false;
+    if (!required('owner_name')) valid = false;
+    if (!validPhone('biz_phone', false)) valid = false;
+    if (!validEmail('biz_email', false)) valid = false;
+    if (!validUrl('biz_website', true)) valid = false;
+    if (!required('biz_address')) valid = false;
+    if (!required('biz_city')) valid = false;
+    if (!required('biz_state')) valid = false;
+    if (!required('biz_postcode')) valid = false;
+    if (!required('biz_timezone')) valid = false;
+    if (!validUrl('review_link', false)) valid = false;
+    if (!required('service_category')) valid = false;
+    if (!required('booking_platform')) valid = false;
+    if (!validUrl('booking_url', true)) valid = false;
+  }
+
+  if (step === 2) {
+    var errEl = document.getElementById('err-services');
+    if (services.length === 0) {
+      if (errEl) errEl.classList.add('show');
+      valid = false;
+    } else if (errEl) {
+      errEl.classList.remove('show');
+    }
+    for (var i = 0; i < services.length; i++) {
+      var nameEl = document.getElementById('svc_name_' + i);
+      var intervalEl = document.getElementById('svc_interval_num_' + i);
+      if (!services[i].name || !services[i].name.trim()) {
+        if (nameEl) nameEl.classList.add('error');
+        valid = false;
+      } else if (nameEl) {
+        nameEl.classList.remove('error');
+      }
+      if (!services[i].interval_num) {
+        if (intervalEl) intervalEl.classList.add('error');
+        valid = false;
+      } else if (intervalEl) {
+        intervalEl.classList.remove('error');
+      }
+    }
+  }
+
+  if (step === 3) {
+    if (!required('contact_count')) valid = false;
+    if (!required('avg_visit_value')) valid = false;
+  }
+
+  if (step === 4) {
+    if (!selectedTone) {
+      document.getElementById('err-tone').classList.add('show');
+      valid = false;
+    } else {
+      document.getElementById('err-tone').classList.remove('show');
+    }
+  }
+
+  if (step === 5) {
+    if (!required('during_hours_response')) valid = false;
+    if (!required('after_hours_response')) valid = false;
+    if (!validPhone('alert_phone', true)) valid = false;
+  }
+
+  if (step === 7) {
+    if (!validPhone('notif_missed_phone', false)) valid = false;
+    if (!validEmail('notif_lead_email', false)) valid = false;
+    if (!validEmail('notif_report_email', false)) valid = false;
+  }
+
+  if (!valid) window.scrollTo({top: 0, behavior: 'smooth'});
+  return valid;
+}
+
+/* =========================================================
+     SERVICES — REPEATABLE BLOCK (max 10)
+     ========================================================= */
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+        return String(str)
+              .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#39;');
+          }
+
+var SERVICE_CATEGORIES = ['lash','brow','hair','skin','waxing','nails','massage','wellness','fitness','other'];
+var SERVICE_CATEGORY_LABELS = {
+  lash:'Lash', brow:'Brow', hair:'Hair', skin:'Skin', waxing:'Waxing / PMU',
+    nails:'Nails', massage:'Massage', wellness:'Wellness', fitness:'Fitness', other:'Other'
+  };
+var DURATIONS = ['15','30','45','60','90','120','custom'];
+
+function optionHtml(value, label, selectedValue) {
+    var sel = (String(value) === String(selectedValue)) ? ' selected' : '';
+  return '<option value="' + value + '"' + sel + '>' + label + '</option>';
+}
+
+function renderServices() {
+    var container = document.getElementById('service-blocks');
+  var html = '';
+  for (var idx = 0; idx < services.length; idx++) {
+    var svc = services[idx];
+    var num = idx + 1;
+    html += '<div class="service-block" id="svc-block-' + idx + '">';
+    html += '  <div class="service-block-header">';
+    html += '    <span class="service-num">Service ' + num + '</span>';
+    if (idx > 0) {
+      html += '<button class="service-remove" type="button" onclick="removeService(' + idx + ')">Remove</button>';
+    }
+    html += '  </div>';
+
+    html += '  <div class="field-row">';
+    html += '    <div class="field"><label class="field-label" for="svc_name_' + idx + '">Service name <span class="req">*</span></label>';
+    html += '    <input type="text" id="svc_name_' + idx + '" value="' + escapeHtml(svc.name) + '" placeholder="e.g. Classic Lash Fill" oninput="updateService(' + idx + ',\'name\',this.value)"/></div>';
+    html += '    <div class="field"><label class="field-label" for="svc_cat_' + idx + '">Category</label>';
+    html += '    <select id="svc_cat_' + idx + '" onchange="updateService(' + idx + ',\'category\',this.value)"><option value="">Select</option>';
+    for (var c = 0; c < SERVICE_CATEGORIES.length; c++) {
+      var catKey = SERVICE_CATEGORIES[c];
+      html += optionHtml(catKey, SERVICE_CATEGORY_LABELS[catKey], svc.category);
+    }
+    html += '    </select></div>';
+    html += '  </div>';
+
+    html += '  <div class="field-row">';
+    html += '    <div class="field"><label class="field-label" for="svc_duration_' + idx + '">Duration</label>';
+    html += '    <select id="svc_duration_' + idx + '" onchange="updateService(' + idx + ',\'duration\',this.value)"><option value="">Select</option>';
+    for (var d = 0; d < DURATIONS.length; d++) {
+      var durVal = DURATIONS[d];
+      var durLabel = durVal === 'custom' ? 'Custom' : durVal + ' min';
+      html += optionHtml(durVal, durLabel, svc.duration);
+    }
+    html += '    </select></div>';
+    html += '    <div class="field"><label class="field-label" for="svc_price_' + idx + '">Price (approx., optional)</label>';
+    html += '    <input type="number" id="svc_price_' + idx + '" value="' + escapeHtml(svc.price) + '" placeholder="e.g. 85" step="0.01" min="0" oninput="updateService(' + idx + ',\'price\',this.value)"/></div>';
+    html += '  </div>';
+
+    if (svc.duration === 'custom') {
+      html += '  <div class="field"><label class="field-label" for="svc_duration_custom_' + idx + '">Custom duration (minutes)</label>';
+      html += '  <input type="number" id="svc_duration_custom_' + idx + '" value="' + escapeHtml(svc.duration_custom) + '" min="1" oninput="updateService(' + idx + ',\'duration_custom\',this.value)"/></div>';
+    }
+
+    html += '  <div class="field"><label class="field-label" for="svc_interval_num_' + idx + '">Recommended return interval <span class="req">*</span></label>';
+    html += '  <div class="field-hint">How often does a typical client come back for this service? This is the core of Glowe\'s reactivation timing.</div>';
+          html += '  <div class="interval-row">';
+    html += '    <input type="number" id="svc_interval_num_' + idx + '" value="' + escapeHtml(svc.interval_num) + '" placeholder="e.g. 3" min="1" oninput="updateService(' + idx + ',\'interval_num\',this.value)"/>';
+    html += '    <select id="svc_interval_unit_' + idx + '" onchange="updateService(' + idx + ',\'interval_unit\',this.value)">';
+    html += optionHtml('days','Days', svc.interval_unit);
+    html += optionHtml('weeks','Weeks', svc.interval_unit || 'weeks');
+    html += optionHtml('months','Months', svc.interval_unit);
+    html += optionHtml('years','Years', svc.interval_unit);
+    html += '    </select>';
+    html += '  </div></div>';
+
+    html += '  <div class="field"><label class="field-label" for="svc_notes_' + idx + '">Notes for messaging</label>';
+    html += '  <div class="field-hint">Anything Glowe should know when messaging clients about this service. Optional.</div>';
+    html += '  <textarea id="svc_notes_' + idx + '" placeholder="e.g. Remind clients to avoid oil-based products 24 hours before" oninput="updateService(' + idx + ',\'notes\',this.value)">' + escapeHtml(svc.notes) + '</textarea></div>';
+
+    html += '  <div class="toggle-wrap"><label class="toggle"><input type="checkbox" id="svc_reactivation_' + idx + '" ' + (svc.reactivation_enabled !== false ? 'checked' : '') + ' onchange="updateService(' + idx + ',\'reactivation_enabled\',this.checked)"/><span class="toggle-slider"></span></label>';
+          html += '  <span class="toggle-label">Include this service in automated reactivation outreach</span></div>';
+
+    html += '</div>';
+  }
+  container.innerHTML = html;
+
+  var addBtn = document.getElementById('add-service-btn');
+  addBtn.style.display = services.length >= 10 ? 'none' : 'flex';
+  addBtn.disabled = services.length >= 10;
+  var hint = document.getElementById('service-count-hint');
+  if (hint) hint.textContent = services.length + ' of 10 services added';
+}
+
+function addService() {
+    if (services.length >= 10) return;
+  services.push({
+        id: newServiceId(), name:'', category:'', duration:'', duration_custom:'', price:'',
+        interval_num:'', interval_unit:'weeks', notes:'', reactivation_enabled:true
+    });
+  renderServices();
+  setTimeout(function() {
+    var blocks = document.querySelectorAll('.service-block');
+    if (blocks.length) blocks[blocks.length-1].scrollIntoView({behavior:'smooth', block:'start'});
+  }, 100);
+}
+
+function removeService(idx) {
+    services.splice(idx, 1);
+  renderServices();
+  saveProgress();
+}
+
+function updateService(idx, field, value) {
+    services[idx][field] = value;
+  if (field === 'duration') renderServices();
+  saveProgress();
+}
+
+/* =========================================================
+     TONE SELECTION
+     ========================================================= */
+var tonePreviews = {
+  warm: "Hi [Name] \uD83D\uDC9A Just wanted to say thank you so much for coming in today — it was genuinely so great to see you! Whenever you're ready to book your next visit, I've got you: [booking link]. See you soon!",
+    professional: "Hi [Name], thank you for visiting us today. When you're ready to schedule your next appointment, you can book directly here: [booking link]. We look forward to seeing you.",
+    fun: "Omg [Name] you left here GLOWING today! We're already counting down to your next visit. Book your next appointment here whenever you're ready: [booking link]",
+    calm: "Hi [Name], it was lovely to see you today. Whenever you're ready for your next visit, we're here: [booking link]. Take good care."
+  };
+
+function selectTone(tone) {
+    var cards = document.querySelectorAll('.radio-card');
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].classList.remove('selected');
+    var input = cards[i].querySelector('input');
+    if (input && input.value === tone) {
+      cards[i].classList.add('selected');
+      input.checked = true;
+    }
+  }
+  selectedTone = tone;
+  document.getElementById('err-tone').classList.remove('show');
+  var preview = document.getElementById('tone-preview');
+  document.getElementById('tp-msg').textContent = tonePreviews[tone] || '';
+      preview.classList.add('show');
+  saveProgress();
+}
+
+(function attachToneHandlers() {
+  var cards = document.querySelectorAll('.radio-card[data-tone]');
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener('click', function() {
+            selectTone(this.getAttribute('data-tone'));
+      });
+  }
+})();
+
+/* =========================================================
+     CONDITIONAL FIELDS
+     ========================================================= */
+document.getElementById('during_hours_response').addEventListener('change', function() {
+    document.getElementById('during-custom-field').style.display = this.value === 'custom' ? 'block' : 'none';
+});
+document.getElementById('after_hours_response').addEventListener('change', function() {
+    document.getElementById('after-custom-field').style.display = this.value === 'custom' ? 'block' : 'none';
+});
+
+/* =========================================================
+     LOCAL STORAGE — SAVE / RESTORE (resume-in-progress only;
+   cleared immediately after a successful submission)
+   ========================================================= */
+var STORAGE_KEY = 'glowe_onboarding_v1';
+
+var STATIC_FIELD_IDS = ['biz_name','owner_name','biz_phone','biz_email','biz_website','biz_address',
+  'biz_city','biz_state','biz_postcode','biz_timezone','gbp_url','review_link','service_category',
+  'booking_platform','booking_url','instagram_url','facebook_url','contact_count','avg_visit_value',
+  'review_count','star_rating','never_use','promotions','during_hours_response','during_hours_custom',
+  'after_hours_response','after_hours_custom','alert_phone','review_timing','review_personal_note',
+  'notif_missed_phone','notif_lead_email','notif_report_email','additional_notes'];
+
+function saveProgress() {
+    if (hasSubmitted) return;
+  var data = { step: currentStep, services: services, tone: selectedTone };
+  for (var i = 0; i < STATIC_FIELD_IDS.length; i++) {
+    data[STATIC_FIELD_IDS[i]] = val(STATIC_FIELD_IDS[i]);
+  }
+  var days = ['mon','tue','wed','thu','fri','sat','sun'];
+  data.hours = {};
+  for (var d = 0; d < days.length; d++) {
+    data.hours[days[d]] = { open: val(days[d] + '_open'), close: val(days[d] + '_close') };
+  }
+  data.tone_preview_approved = document.getElementById('tone_preview_approved') ? document.getElementById('tone_preview_approved').checked : false;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    showSavingBar();
+  } catch (e) { /* localStorage unavailable — progress simply won't persist across reloads */ }
+}
+
+function showSavingBar() {
+    var bar = document.getElementById('saving-bar');
+  bar.classList.add('show');
+  setTimeout(function() { bar.classList.remove('show'); }, 1800);
+}
+
+function restoreProgress() {
+    try {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    var data = JSON.parse(saved);
+
+    for (var i = 0; i < STATIC_FIELD_IDS.length; i++) {
+      var id = STATIC_FIELD_IDS[i];
+      var el = document.getElementById(id);
+      if (el && data[id]) el.value = data[id];
+    }
+
+    if (data.hours) {
+      var days = ['mon','tue','wed','thu','fri','sat','sun'];
+      for (var d = 0; d < days.length; d++) {
+        var dayData = data.hours[days[d]];
+        if (!dayData) continue;
+        var openEl = document.getElementById(days[d] + '_open');
+        var closeEl = document.getElementById(days[d] + '_close');
+        if (openEl && dayData.open) openEl.value = dayData.open;
+        if (closeEl && dayData.close) closeEl.value = dayData.close;
+      }
+    }
+
+    if (data.services && data.services.length) {
+      services = data.services;
+      for (var s = 0; s < services.length; s++) {
+        if (!services[s].id) services[s].id = newServiceId();
+      }
+      renderServices();
+    }
+
+    if (data.tone) selectTone(data.tone);
+
+    var approvedBox = document.getElementById('tone_preview_approved');
+    if (approvedBox) approvedBox.checked = !!data.tone_preview_approved;
+
+    if (data.during_hours_response === 'custom') document.getElementById('during-custom-field').style.display = 'block';
+    if (data.after_hours_response === 'custom') document.getElementById('after-custom-field').style.display = 'block';
+
+    if (data.step && data.step > 1) {
+      if (confirm('You have an onboarding form in progress on this device. Continue where you left off?')) {
+        showStep(data.step);
+      }
+    }
+    } catch (e) { /* corrupted or unavailable saved data — start fresh */ }
+}
+
+/* Save on any input change across static fields */
+(function attachAutoSave() {
+    var inputs = document.querySelectorAll('input, select, textarea');
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].addEventListener('change', saveProgress);
+    inputs[i].addEventListener('input', saveProgress);
+  }
+})();
+
+/* =========================================================
+     BUILD PAYLOAD — canonical schema, sent as-is to Zapier.
+   See FIELD_MAPPING.md for the full field -> GHL slug table.
+     ========================================================= */
+function buildBusinessHours() {
+    var days = ['mon','tue','wed','thu','fri','sat','sun'];
+  var hours = {};
+  for (var d = 0; d < days.length; d++) {
+    var open = val(days[d] + '_open');
+    var close = val(days[d] + '_close');
+    hours[days[d]] = { open: open || null, close: close || null };
+  }
+  return hours;
+}
+
+function buildServicesPayload() {
+    var out = [];
+  for (var i = 0; i < services.length; i++) {
+    var svc = services[i];
+    var durationMinutes = null;
+    if (svc.duration === 'custom') {
+      durationMinutes = svc.duration_custom ? parseInt(svc.duration_custom, 10) : null;
+    } else if (svc.duration) {
+      durationMinutes = parseInt(svc.duration, 10);
+    }
+    out.push({
+            service_number: i + 1,
+            service_id: svc.id || newServiceId(),
+            name: (svc.name || '').trim(),
+            category: svc.category || '',
+            duration_minutes: (durationMinutes === null || isNaN(durationMinutes)) ? null : durationMinutes,
+            price: (svc.price !== '' && svc.price !== undefined && svc.price !== null) ? parseFloat(svc.price) : null,
+            return_interval: svc.interval_num ? parseInt(svc.interval_num, 10) : null,
+            return_unit: svc.interval_unit || 'weeks',
+            notes: svc.notes || '',
+            reactivation_enabled: svc.reactivation_enabled !== false
+      });
+  }
+  return out;
+}
+
+function buildPayload() {
+    return {
+          schema_version: CONFIG.SCHEMA_VERSION,
+          submission_mode: SUBMISSION_MODE,
+          submitted_at: new Date().toISOString(),
+          source: CONFIG.SOURCE,
+          contact_ref: {
+            ghl_contact_id: GHL_CONTACT_ID,
+                    update_token: UPDATE_TOKEN
+              },
+                  business: {
+      name: val('biz_name').trim(),
+              owner_first_name: val('owner_name').trim(),
+              phone: normalizePhone(val('biz_phone')),
+      email: normalizeEmail(val('biz_email')),
+      website_url: normalizeUrl(val('biz_website')),
+      address: {
+        line1: val('biz_address').trim(),
+        city: val('biz_city').trim(),
+        state: val('biz_state').trim(),
+        postal_code: val('biz_postcode').trim(),
+        country: 'United States'
+        },
+              timezone: val('biz_timezone'),
+                      primary_service_category: val('service_category'),
+                      booking_platform: val('booking_platform'),
+                      booking_url: normalizeUrl(val('booking_url')),
+      google_business_profile_url: normalizeUrl(val('gbp_url')),
+      google_review_url: normalizeUrl(val('review_link')),
+      facebook_url: normalizeUrl(val('facebook_url')),
+      instagram_url: normalizeUrl(val('instagram_url'))
+},
+    onboarding: {
+      customers: {
+        active_client_range: val('contact_count'),
+                  avg_visit_value: val('avg_visit_value') ? parseFloat(val('avg_visit_value')) : null,
+                  review_count: val('review_count') ? parseInt(val('review_count'), 10) : null,
+                  star_rating: val('star_rating') || ''
+          },
+                branding: {
+        tone: selectedTone,
+                  restricted_words: val('never_use').trim(),
+                  current_promotion: val('promotions').trim(),
+                  tone_preview_approved: document.getElementById('tone_preview_approved') ? document.getElementById('tone_preview_approved').checked : false
+          },
+                missed_call: {
+        during_hours_response: val('during_hours_response'),
+                  during_hours_custom_message: val('during_hours_custom').trim(),
+                  after_hours_response: val('after_hours_response'),
+                  after_hours_custom_message: val('after_hours_custom').trim(),
+                  business_hours: buildBusinessHours(),
+                  internal_alert_phone: normalizePhone(val('alert_phone'))
+                },
+      reviews: {
+        timing_preference: val('review_timing'),
+                  personal_note: val('review_personal_note').trim()
+          },
+                notifications: {
+        missed_call_alert_phone: normalizePhone(val('notif_missed_phone')),
+                  new_lead_email: normalizeEmail(val('notif_lead_email')),
+        monthly_report_email: normalizeEmail(val('notif_report_email'))
+                },
+      additional_notes: val('additional_notes').trim()
+        },
+            services: buildServicesPayload()
+              };
+    }
+
+/* =========================================================
+     SUBMIT
+     ========================================================= */
+function showGlobalError(message) {
+    var banner = document.getElementById('global-error-banner');
+  var text = document.getElementById('global-error-text');
+  text.textContent = message;
+  banner.classList.add('show');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function clearGlobalError() {
+    document.getElementById('global-error-banner').classList.remove('show');
+}
+
+function setSubmitButtonState(submitting) {
+    var btn = document.getElementById('submit-btn');
+  btn.disabled = submitting;
+  btn.textContent = submitting ? 'Submitting…' : 'Submit Onboarding →';
+}
+
+async function submitForm() {
+  if (isSubmitting || hasSubmitted) return;
+  if (!validateStep(7)) return;
+
+  clearGlobalError();
+  isSubmitting = true;
+  setSubmitButtonState(true);
+  document.getElementById('submitting-overlay').classList.add('show');
+
+  var payload = buildPayload();
+  var controller = new AbortController();
+  var timeoutId = setTimeout(function() { controller.abort(); }, CONFIG.SUBMIT_TIMEOUT_MS);
+
+  try {
+    var response = await fetch(CONFIG.ZAPIER_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+      });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error('Submission was not accepted (status ' + response.status + ').');
+    }
+
+    hasSubmitted = true;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+
+    document.getElementById('submitting-overlay').classList.remove('show');
+    var steps = document.querySelectorAll('.step');
+    for (var i = 0; i < steps.length; i++) steps[i].style.display = 'none';
+    document.getElementById('success-screen').classList.add('show');
+    document.getElementById('prog-bar').style.width = '100%';
+    document.getElementById('hdr-step').textContent = 'Onboarding Complete ✓';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+  } catch (err) {
+    clearTimeout(timeoutId);
+    document.getElementById('submitting-overlay').classList.remove('show');
+    isSubmitting = false;
+    setSubmitButtonState(false);
+    if (err && err.name === 'AbortError') {
+      showGlobalError('The request timed out. Please check your connection and try submitting again — none of your answers were lost.');
+    } else {
+      showGlobalError('We could not submit your form right now. Please try again in a moment. If this keeps happening, contact your Glowe advisor — none of your answers were lost.');
+    }
+  }
+}
+
+/* =========================================================
+     UPDATE MODE — pre-population scaffolding.
+     CONFIG.UPDATE_LOOKUP_ENDPOINT must be a protected intermediary
+   (never a direct GoHighLevel private API call from the browser).
+     This is NOT yet connected — see README "Update Mode" section.
+     ========================================================= */
+  async function initUpdateMode() {
+    if (SUBMISSION_MODE !== 'update') return;
+  var banner = document.getElementById('mode-banner');
+  if (!GHL_CONTACT_ID || !UPDATE_TOKEN) {
+    banner.textContent = 'This update link is missing required parameters. Please use the secure link sent to you, or contact your Glowe advisor for a new one.';
+    banner.classList.add('show');
+    return;
+  }
+  if (!CONFIG.UPDATE_LOOKUP_ENDPOINT) {
+    banner.textContent = 'Update mode: automatic pre-population is not yet connected. You can still fill out and submit this form manually — it will update your existing record.';
+    banner.classList.add('show');
+    return;
+  }
+  banner.textContent = 'Loading your existing information…';
+  banner.classList.add('show');
+  try {
+    var res = await fetch(CONFIG.UPDATE_LOOKUP_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contact_id: GHL_CONTACT_ID, token: UPDATE_TOKEN })
+      });
+    if (!res.ok) throw new Error('lookup failed');
+    var data = await res.json();
+    applyExistingData(data);
+    banner.textContent = 'Your existing information has been loaded. Review and update anything below.';
+  } catch (e) {
+    banner.textContent = 'We could not load your existing information automatically. You can still fill out this form manually and submit — it will update your existing record.';
+  }
+}
+
+function applyExistingData(data) {
+    if (!data) return;
+  if (data.business) {
+    var b = data.business;
+    if (b.name) document.getElementById('biz_name').value = b.name;
+    if (b.phone) document.getElementById('biz_phone').value = b.phone;
+    if (b.email) document.getElementById('biz_email').value = b.email;
+    if (b.website_url) document.getElementById('biz_website').value = b.website_url;
+    if (b.address && b.address.line1) document.getElementById('biz_address').value = b.address.line1;
+    if (b.address && b.address.city) document.getElementById('biz_city').value = b.address.city;
+    if (b.address && b.address.state) document.getElementById('biz_state').value = b.address.state;
+    if (b.address && b.address.postal_code) document.getElementById('biz_postcode').value = b.address.postal_code;
+    if (b.timezone) document.getElementById('biz_timezone').value = b.timezone;
+    if (b.google_review_url) document.getElementById('review_link').value = b.google_review_url;
+  }
+  if (data.services && data.services.length) {
+    services = data.services.map(function(s) {
+            return {
+                      id: newServiceId(), name: s.name || '', category: s.category || '',
+                      duration: s.duration_minutes ? String(s.duration_minutes) : '',
+                      duration_custom: '', price: (s.price !== null && s.price !== undefined) ? s.price : '',
+                      interval_num: s.return_interval || '', interval_unit: s.return_unit || 'weeks',
+                      notes: s.notes || '', reactivation_enabled: s.reactivation_enabled !== false
+              };
+    });
+    renderServices();
+    }
+  updateReviewLinkDisplay();
+  }
+
+/* =========================================================
+     INIT
+     ========================================================= */
+updateProgress(1);
+if (SUBMISSION_MODE === 'update') {
+  document.getElementById('hdr-step').textContent += ' · Update Mode';
+}
+restoreProgress();
+if (services.length === 0) addService();
+initUpdateMode();
+</script>
+  </body>
+  </html>
+  
