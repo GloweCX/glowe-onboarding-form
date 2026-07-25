@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.swp
+
+# Local-only environment overrides (never commit real secrets here)
+config.local.js
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
