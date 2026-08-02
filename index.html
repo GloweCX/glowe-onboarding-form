@@ -679,7 +679,7 @@ select{
   <p>Submitting your setup form...</p>
 </div>
 <script>
-const GHL_WEBHOOK_URL = 'YOUR_GHL_WEBHOOK_URL_HERE';
+const GHL_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/25883126/44fmx9n/';
 
 let currentStep = 1;
 const totalSteps = 7;
@@ -1103,7 +1103,7 @@ async function submitForm() {
   document.getElementById('submit-btn').disabled = true;
   const payload = buildPayload();
   try {
-    if (GHL_WEBHOOK_URL && GHL_WEBHOOK_URL !== 'YOUR_GHL_WEBHOOK_URL_HERE') {
+    if (GHL_WEBHOOK_URL && GHL_WEBHOOK_URL !== 'https://hooks.zapier.com/hooks/catch/25883126/44fmx9n/') {
       await fetch(GHL_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
