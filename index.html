@@ -1048,6 +1048,7 @@ function buildPayload() {
     form_version: '2.0',
     submitted_at: new Date().toISOString(),
     record_type: 'onboarding',
+    submission_mode: new URLSearchParams(window.location.search).get('mode') === 'update' ? 'update' : 'initial',
     glowe_biz_name:                   val('biz_name'),
     glowe_biz_email:                  val('biz_email'),
     glowe_biz_phone:                  val('biz_phone'),
