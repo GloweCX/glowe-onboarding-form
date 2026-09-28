@@ -660,6 +660,7 @@ select{
       <div class="spacer"></div>
       <button class="btn-primary" onclick="submitForm()" id="submit-btn">Submit Setup →</button>
     </div>
+    <div class="field-err" id="submit-error" style="text-align:right;margin-top:10px">We couldn't send your form — please check your internet connection and click Submit again. Your answers are saved.</div>
   </div>
   <div class="success-screen" id="success-screen">
     <div class="success-icon">✓</div>
@@ -1101,17 +1102,27 @@ async function submitForm() {
   if (!validateStep(7)) return;
   document.getElementById('submitting-overlay').classList.add('show');
   document.getElementById('submit-btn').disabled = true;
+  document.getElementById('submit-error').classList.remove('show');
   const payload = buildPayload();
+  // Send as a "simple" request (no custom Content-Type header). Browsers block
+  // cross-site JSON-header requests to Zapier; Zapier still parses the JSON body.
+  let sent = false;
   try {
-    if (GHL_WEBHOOK_URL && GHL_WEBHOOK_URL !== 'https://hooks.zapier.com/hooks/catch/25883126/44fmx9n/') {
-      await fetch(GHL_WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-    }
+    const res = await fetch(GHL_WEBHOOK_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    sent = res.ok;
+    if (!sent) console.error('Webhook returned status', res.status);
   } catch(e) {
     console.error('Webhook error:', e);
+  }
+  if (!sent) {
+    // Keep the client's answers and let them retry instead of showing false success.
+    document.getElementById('submitting-overlay').classList.remove('show');
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-error').classList.add('show');
+    return;
   }
   try { localStorage.removeItem('glowe_onboarding'); } catch(e) {}
   document.getElementById('submitting-overlay').classList.remove('show');
